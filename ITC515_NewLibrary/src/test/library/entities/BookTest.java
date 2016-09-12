@@ -197,6 +197,32 @@ public class BookTest extends TestCase {
 	}
 	
 	
+	
+	@Test
+	public void testLoseNewBook(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+		try {
+			//lose a new book
+			book.lose();
+			//this should fail
+			fail("cannot loose a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+	}
+	
+	@Test
+	public void testLose(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		//borrow the book
+		book.borrow(getLoan());
+		//lose the book
+		book.lose();
+		//this should be successful
+	}
+	
+	
 	private ILoan getLoan() {
 
 		return Mockito.mock(ILoan.class);
