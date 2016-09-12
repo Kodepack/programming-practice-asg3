@@ -140,9 +140,59 @@ public class BookTest extends TestCase {
 		assertNull(book.getLoan());
 		//Borrow the book
 		book.borrow(getLoan());
-		//getLoan should be not null for a borrowed boook
+		//getLoan should be not null for a borrowed book
 		assertNotNull(book.getLoan());
 
+	}
+	
+
+	@Test
+	public void testReturnNewBook(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+		try {
+			//Should not be possible to return a new book
+			book.returnBook(!DAMAGED);
+			fail("cannot return a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+	}
+
+	
+	@Test
+	public void testReturnBorrowedNotDamagedBookAndReborrow(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+		//borrow the book
+		book.borrow(getLoan());
+		//return the book not damaged
+		book.returnBook(!DAMAGED);
+		//borrow the book again
+		book.borrow(getLoan());
+		//successfully borrowed again
+
+	}
+
+	
+	@Test
+	public void testReturnBorrowedDamagedBookAndReborrow(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+
+		//borrow the book
+		book.borrow(getLoan());
+		//return the book damaged
+		book.returnBook(!DAMAGED);
+		
+		try {
+			//borrow the book again
+			book.borrow(getLoan());
+			//this should fail
+			fail("cannot borrow a damaged book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
 	}
 	
 	
