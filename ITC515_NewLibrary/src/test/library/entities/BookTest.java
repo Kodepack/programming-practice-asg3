@@ -105,13 +105,21 @@ public class BookTest extends TestCase {
 		assertEquals(book.getID(), BOOK_ID);
 	}
 
+
+	
+	@Test
+	public void testBorrow(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		book.borrow(getLoan());
+		assertEquals(EBookState.ON_LOAN,book.getState());
+	}
 	
 	@Test
 	public void testBorrowWithNullLoan(){
 		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
 		try {
 			book.borrow(null);
-			fail("No validation for null loan");
+			fail("Cannot borrow for null loan");
 		} catch (IllegalArgumentException e) {
 			//ignore
 		}
@@ -126,10 +134,13 @@ public class BookTest extends TestCase {
 			book.borrow(getLoan());
 			//Borrow twice the same book
 			book.borrow(getLoan());
-			fail("No validation for borrowing more than onece");
+			//this should fail
+			fail("Cannot borrow already borrowed book");
 		} catch (RuntimeException e) {
 			//ignore
 		}
+		assertEquals(EBookState.ON_LOAN,book.getState());
+
 	}
 	
 	@Test
@@ -157,6 +168,7 @@ public class BookTest extends TestCase {
 		} catch (RuntimeException e) {
 			//ignore
 		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
 	}
 
 	
@@ -168,9 +180,12 @@ public class BookTest extends TestCase {
 		book.borrow(getLoan());
 		//return the book not damaged
 		book.returnBook(!DAMAGED);
+		assertEquals(EBookState.AVAILABLE,book.getState());
 		//borrow the book again
 		book.borrow(getLoan());
 		//successfully borrowed again
+		assertEquals(EBookState.ON_LOAN,book.getState());
+		
 
 	}
 	
@@ -184,7 +199,7 @@ public class BookTest extends TestCase {
 		//borrow the book
 		book.borrow(getLoan());
 		//return the book damaged
-		book.returnBook(!DAMAGED);
+		book.returnBook(DAMAGED);
 		
 		try {
 			//borrow the book again
@@ -194,6 +209,7 @@ public class BookTest extends TestCase {
 		} catch (RuntimeException e) {
 			//ignore
 		}
+		assertEquals(EBookState.DAMAGED,book.getState());
 	}
 	
 	
@@ -210,6 +226,7 @@ public class BookTest extends TestCase {
 		} catch (RuntimeException e) {
 			//ignore
 		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
 	}
 	
 	@Test
@@ -220,8 +237,41 @@ public class BookTest extends TestCase {
 		//lose the book
 		book.lose();
 		//this should be successful
+		assertEquals(EBookState.LOST,book.getState());
+
 	}
 	
+	@Test
+	public void testRepairNewBook(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+		try {
+			//lose a new book
+			book.repair();
+			//this should fail
+			fail("cannot repair a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
+	}
+	
+	@Test
+	public void testRepairDamagedBook(){
+		final boolean DAMAGED = true;
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		book.borrow(getLoan());
+		assertEquals(EBookState.ON_LOAN,book.getState());
+
+		book.returnBook(DAMAGED);
+		assertEquals(EBookState.DAMAGED,book.getState());
+		book.repair();
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		
+
+	}
 	
 	private ILoan getLoan() {
 
