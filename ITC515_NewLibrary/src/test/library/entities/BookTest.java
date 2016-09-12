@@ -272,6 +272,65 @@ public class BookTest extends TestCase {
 		
 
 	}
+
+	@Test
+	public void testDisposeBorrowedBook(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		final boolean DAMAGED = true;
+		try {
+			book.borrow(getLoan());
+			//lose a new book
+			book.dispose();
+			//this should fail
+			fail("cannot dispose a borrowed");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.ON_LOAN,book.getState());
+	}
+	
+	
+	@Test
+	public void testDisposeNewBook(){
+		final boolean DAMAGED = true;
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		book.dispose();
+		assertEquals(EBookState.DISPOSED,book.getState());
+
+	}
+	
+	
+	@Test
+	public void testDisposeLostBook(){
+		final boolean DAMAGED = true;
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		book.borrow(getLoan());
+		assertEquals(EBookState.ON_LOAN,book.getState());
+		book.lose();
+		assertEquals(EBookState.LOST,book.getState());
+		book.dispose();
+		assertEquals(EBookState.DISPOSED,book.getState());
+	}
+	
+	
+	@Test
+	public void testDisposeDamagedBook(){
+		final boolean DAMAGED = true;
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		book.borrow(getLoan());
+		assertEquals(EBookState.ON_LOAN,book.getState());
+		book.returnBook(DAMAGED);
+		assertEquals(EBookState.DAMAGED,book.getState());
+		book.dispose();
+		assertEquals(EBookState.DISPOSED,book.getState());
+	}	
+	
 	
 	private ILoan getLoan() {
 
