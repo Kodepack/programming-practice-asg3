@@ -118,7 +118,7 @@ public class BookTest extends TestCase {
 	}
 
 	@Test
-	public void testBorrowWith(){
+	public void testBorrowTwice(){
 		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
 		
 		try {
@@ -130,6 +130,19 @@ public class BookTest extends TestCase {
 		} catch (RuntimeException e) {
 			//ignore
 		}
+	}
+	
+	@Test
+	public void testGetLoan(){
+		IBook book = new Book(AUTHOR, TITLE, CALL_NUMBER, BOOK_ID);
+		
+		//There should be no loans for a new book.
+		assertNull(book.getLoan());
+		//Borrow the book
+		book.borrow(getLoan());
+		//getLoan should be not null for a borrowed boook
+		assertNotNull(book.getLoan());
+
 	}
 	
 	
