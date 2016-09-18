@@ -58,10 +58,10 @@ public class Scanner extends JFrame implements IScanner {
 		textField.setBounds(190, 50, 150, 25);
 		panel.add(textField);
 		textField.setColumns(10);
-		textField.setEditable(false);
+		textField.setEditable(true);
 		
 		btnScan = new JButton("Scan Book Barcode");
-		btnScan.setEnabled(false);
+		btnScan.setEnabled(true);
 		btnScan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (listener == null) {
