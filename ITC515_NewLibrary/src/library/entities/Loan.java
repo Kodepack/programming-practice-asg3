@@ -36,22 +36,12 @@ public class Loan implements ILoan {
 				  borrowDate.compareTo(returnDate) <= 0);
 	}
 
-	@Override
-	public void complete() {
-		if (!(state_ == ELoanState.CURRENT || state_ == ELoanState.OVERDUE)) {
-			throw new RuntimeException(
-					String.format("Loan : complete : incorrect state transition  : %s -> %s\n",
-							state_, ELoanState.COMPLETE));
-		}
-		state_ = ELoanState.COMPLETE;		
-	}
-	
+
 	@Override
 	public void commit(int loanId) {
 		if (!(state_ == ELoanState.PENDING)) {
-			throw new RuntimeException(
-					String.format("Loan : commit : incorrect state value  : %s -> %s\n", 
-							state_, ELoanState.CURRENT));
+
+			exRuntimeException(ELoanState.CURRENT, "commit");
 		}
 		if (loanId <= 0) {
 			throw new RuntimeException(
@@ -64,6 +54,15 @@ public class Loan implements ILoan {
 		book_.borrow(this);
 		borrower_.addLoan(this);
 	}
+	
+	@Override
+	public void complete() {
+		if (!(state_ == ELoanState.CURRENT || state_ == ELoanState.OVERDUE)) {
+
+			exRuntimeException(ELoanState.COMPLETE, "complete");
+		}
+		state_ = ELoanState.COMPLETE;		
+	}
 
 	@Override
 	public boolean isOverDue() {
@@ -73,14 +72,22 @@ public class Loan implements ILoan {
 	@Override
 	public boolean checkOverDue(Date currentDate) {
 		if (!(state_ == ELoanState.CURRENT || state_ == ELoanState.OVERDUE )) {
-			throw new RuntimeException(
-					String.format("Loan : checkOverDue : incorrect state transition  : %s -> %s\n",
-							state_, ELoanState.OVERDUE));
+
+			
+			exRuntimeException(ELoanState.OVERDUE, "checkOverDue");
+			
 		}
 		if (currentDate.compareTo(dueDate_) > 0) {
 			state_ = ELoanState.OVERDUE;
 		}
 		return isOverDue();
+	}
+	
+	private void exRuntimeException(ELoanState state, String stateText){
+		
+		throw new RuntimeException(
+				String.format("Loan : "+ stateText+" : incorrect state value  : %s -> %s\n",
+						state_, state));
 	}
 
 
