@@ -28,6 +28,24 @@ public class LoanTest extends TestCase{
 	
 	
 	
+	private static IBook getBook() {
+
+		return Mockito.mock(IBook.class);
+	}
+
+	private static IMember getMember() {
+
+		return Mockito.mock(IMember.class);
+	}
+	
+	public ELoanState getState() {
+		return state;
+	}
+
+	public void setState(ELoanState state) {
+		this.state = state;
+	}
+
 	private static Date dateString(String dateInString){
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
