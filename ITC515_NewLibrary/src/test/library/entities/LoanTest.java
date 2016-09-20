@@ -25,7 +25,22 @@ public class LoanTest extends TestCase{
 	private static final Date DUEDATE=dateString("22-01-2016");
 	private ELoanState state;
 	
-	
+	@Test
+	// tested for null values
+	public void testNullValues(){
+		
+		
+		ILoan loan =null;
+		try {
+
+			loan = new Loan(null, null, null, null);
+			fail("null values are not checked in constructor");
+
+		} catch (IllegalArgumentException e) {
+			//Exception ignored
+		}
+		
+	}
 	
 	
 	private static IBook getBook() {
