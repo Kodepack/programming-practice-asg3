@@ -19,7 +19,7 @@ public class Loan implements ILoan {
 	
 	public Loan(IBook book, IMember borrower, Date borrowDate, Date returnDate) {
 		if (!sane(book, borrower, borrowDate, returnDate)) {
-			throw new IllegalArgumentException("Loan: constructor : bad parameters");
+			throw new IllegalArgumentException("Loan: constructor : invalid or bad parameters");
 		}
 		this.book_ = book;
 		this.borrower_ = borrower;
