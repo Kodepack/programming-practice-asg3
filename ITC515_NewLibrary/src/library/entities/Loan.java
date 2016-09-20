@@ -37,24 +37,6 @@ public class Loan implements ILoan {
 	}
 
 	@Override
-	public void commit(int loanId) {
-		if (!(state_ == ELoanState.PENDING)) {
-			throw new RuntimeException(
-					String.format("Loan : commit : incorrect state transition  : %s -> %s\n", 
-							state_, ELoanState.CURRENT));
-		}
-		if (loanId <= 0) {
-			throw new RuntimeException(
-					String.format("Loan : commit : id must be a positive integer  : %d\n", 
-							loanId));
-		}
-		this.id_ = loanId;
-		state_ = ELoanState.CURRENT;
-		book_.borrow(this);
-		borrower_.addLoan(this);
-	}
-
-	@Override
 	public void complete() {
 		if (!(state_ == ELoanState.CURRENT || state_ == ELoanState.OVERDUE)) {
 			throw new RuntimeException(
@@ -62,6 +44,25 @@ public class Loan implements ILoan {
 							state_, ELoanState.COMPLETE));
 		}
 		state_ = ELoanState.COMPLETE;		
+	}
+	
+	@Override
+	public void commit(int loanId) {
+		if (!(state_ == ELoanState.PENDING)) {
+			throw new RuntimeException(
+					String.format("Loan : commit : incorrect state value  : %s -> %s\n", 
+							state_, ELoanState.CURRENT));
+		}
+		if (loanId <= 0) {
+			throw new RuntimeException(
+					String.format("Loan : commit : id a valid integer  - (Postive Value)  : %d\n", 
+							loanId));
+		}
+		
+		this.id_ = loanId;
+		state_ = ELoanState.CURRENT;
+		book_.borrow(this);
+		borrower_.addLoan(this);
 	}
 
 	@Override
