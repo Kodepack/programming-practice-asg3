@@ -29,7 +29,7 @@ import org.mockito.Mockito;
  *
  */
 
-public class BookTest extends TestCase {
+public class BookTest  {
 
 	private static final String AUTHOR = "Dan Brown";
 	private static final String TITLE = "Angels and Deamons";

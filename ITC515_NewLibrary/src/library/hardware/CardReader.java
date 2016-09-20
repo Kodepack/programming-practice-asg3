@@ -34,7 +34,8 @@ public class CardReader extends JFrame implements ICardReader {
 		panel.setBounds(10, 10, 400, 200);
 		getContentPane().add(panel);
 		panel.setLayout(null);
-		
+		//Kishantha
+		//Make the vairable final to support lower versions
 		final JLabel lblErrorMesg = new JLabel("");
 		lblErrorMesg.setForeground(Color.RED);
 		lblErrorMesg.setBounds(12, 21, 358, 16);
