@@ -82,6 +82,16 @@ public class Loan implements ILoan {
 		return isOverDue();
 	}
 
+
+
+	@Override
+	public String toString() {
+		return (String.format("Loan ID:  %d\nAuthor:   %s\nTitle:    %s\nBorrower: %s %s\nBorrowed: %s\nDue Date: %s", 
+				id_, book_.getAuthor(), book_.getTitle(), borrower_.getFirstName(), borrower_.getLastName(),
+				DateFormat.getDateInstance().format(borrowDate_),
+				DateFormat.getDateInstance().format(dueDate_)));
+	}
+	
 	@Override
 	public IMember getBorrower() {
 		return borrower_;
@@ -99,14 +109,6 @@ public class Loan implements ILoan {
 	
 	public ELoanState getState() {
 		return state_;
-	}
-
-	@Override
-	public String toString() {
-		return (String.format("Loan ID:  %d\nAuthor:   %s\nTitle:    %s\nBorrower: %s %s\nBorrowed: %s\nDue Date: %s", 
-				id_, book_.getAuthor(), book_.getTitle(), borrower_.getFirstName(), borrower_.getLastName(),
-				DateFormat.getDateInstance().format(borrowDate_),
-				DateFormat.getDateInstance().format(dueDate_)));
 	}
 
 
