@@ -68,7 +68,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		this.ui = new BorrowUC_UI(this);
 		setState(EBorrowState.INITIALIZED);
 		
-		this.display.setDisplay((JPanel) ui,"Library");
+		//Kishantha
+		//No need to display here as it will be done at
+		//initialise() which is called from the Main class borrowBooks() method
+		//this.display.setDisplay((JPanel) ui,"Library");
 	}
 	
 	public void initialise() {
@@ -78,6 +81,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	
 	public void close() {
 		display.setDisplay(previous, "Main Menu");
+		//Kishantha 
+		//disabling the reader and scanner before going to main screen
+		reader.setEnabled(false);
+		scanner.setEnabled(false);
 	}
 
 	@Override
