@@ -29,6 +29,7 @@ public class Display extends JFrame implements IDisplay {
 	
 	@Override
 	public void setDisplay(JPanel panel, String id) {
+		
 		getContentPane().add(panel, id);
 		CardLayout cardLayout = (CardLayout) (getContentPane().getLayout());
 		cardLayout.show(getContentPane(), id);
@@ -36,6 +37,13 @@ public class Display extends JFrame implements IDisplay {
 			System.out.println("Display.setDisplay: removing current");
 			cardLayout.removeLayoutComponent(current);
 		}
+		
+		//Kishantha
+		//Frame needs to be invalidated and validated for the
+		//new panel to be visible.
+        this.invalidate();
+        this.validate();
+        
 		current = panel;
 	}
 
