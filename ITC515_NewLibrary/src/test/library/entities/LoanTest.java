@@ -26,4 +26,23 @@ public class LoanTest extends TestCase{
 	private ELoanState state;
 	
 	
+	
+	
+	private static Date dateString(String dateInString){
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
+		Date date=null;
+		try {
+			
+			date = sdf.parse(dateInString);
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return date;
+	}
+	
+	
 }
