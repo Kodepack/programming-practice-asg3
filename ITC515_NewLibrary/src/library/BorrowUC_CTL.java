@@ -26,6 +26,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 									 IScannerListener, 
 									 IBorrowUIListener {
 	
+	//Prabath
+	//Added Max count globle variable
+	private static final int MAX_COUNT = 3;
+	
 	private ICardReader reader;
 	private IScanner scanner; 
 	private IPrinter printer; 
@@ -147,7 +151,45 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	
 	@Override
 	public void bookScanned(int barcode) {
-		throw new RuntimeException("Not implemented yet");
+		//throw new RuntimeException("Not implemented yet");
+		//Prabath
+		//Added the book scanned implementation
+		if (state != EBorrowState.SCANNING_BOOKS) {
+			throw new RuntimeException(
+					String.format("Invalid operation in state: %s", state));			
+		}
+		ui.displayErrorMessage("");
+		IBook book = bookDAO.getBookByID(barcode);
+		if (book == null) {
+			ui.displayErrorMessage(String.format("Book %d not found", barcode));
+			return;
+		}
+
+		if (book.getState() != EBookState.AVAILABLE) {
+			ui.displayErrorMessage(String.format("Book %d is not available: %s", book.getID(), book.getState()));
+			return;
+		}
+		if (bookList.contains(book)) {
+			ui.displayErrorMessage(String.format("Book %d already scanned: ", book.getID()));
+			return;
+		}
+
+		scanCount++;
+		bookList.add(book);
+		ILoan loan = loanDAO.createLoan(borrower, book);
+		loanList.add(loan);
+		
+		//display current book
+		ui.displayScannedBookDetails(book.toString());
+		//display pending loans
+		ui.displayPendingLoan(loan.toString());
+
+		
+		if (scanCount >= MAX_COUNT) {
+			setState(EBorrowState.CONFIRMING_LOANS);
+		}
+		
+		
 	}
 
 	
