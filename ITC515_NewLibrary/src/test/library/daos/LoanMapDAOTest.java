@@ -55,7 +55,18 @@ public class LoanMapDAOTest {
 	}
 	
 	
+	@Test
+	public void testCommitLoan(){
+		
+		ILoanHelper helper = Mockito.mock(ILoanHelper.class);
+		ILoan iLoan = Mockito.mock(ILoan.class);
+		ILoanDAO loanMapDAO = new LoanMapDAO(helper);
+		loanMapDAO.commitLoan(iLoan);
+		Mockito.verify(iLoan).commit(Matchers.any(Integer.class));
+		
+	}
 
+	
 
 	
 }
