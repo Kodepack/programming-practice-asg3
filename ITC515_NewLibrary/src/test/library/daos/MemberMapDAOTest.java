@@ -192,7 +192,7 @@ public class MemberMapDAOTest {
 		//Lets try to find member by last name
 		List<IMember> memberList = memberMapDAO.findMembersByEmailAddress(MEMBER_01_CONTACT_EMAIL);
 		IMember member = memberList.get(0);
-
+ 
 		//Lets check the size of the member list
 		assertEquals(1,memberList.size());
 		//lets check the member's properties
