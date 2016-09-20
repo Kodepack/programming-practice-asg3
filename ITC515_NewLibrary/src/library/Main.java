@@ -44,7 +44,7 @@ public class Main implements IMainListener {
 		loanDAO = new LoanMapDAO(new LoanHelper());
 		memberDAO = new MemberMapDAO(new MemberHelper());
 		
-		//setupTestData();
+		setupTestData();
 	}
 
 
