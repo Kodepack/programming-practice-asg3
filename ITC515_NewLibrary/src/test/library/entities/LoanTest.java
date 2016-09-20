@@ -20,4 +20,10 @@ import org.mockito.Mockito;
 
 public class LoanTest extends TestCase{
 
+	private static final int ID=25;
+	private static final Date BORROWDATE= dateString("21-01-2016");
+	private static final Date DUEDATE=dateString("22-01-2016");
+	private ELoanState state;
+	
+	
 }
