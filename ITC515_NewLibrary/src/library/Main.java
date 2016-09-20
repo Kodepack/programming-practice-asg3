@@ -39,11 +39,12 @@ public class Main implements IMainListener {
 		printer = new Printer();
 		display = new Display();
 		
-		
+		//Kishantha
+		//Initialize the concrete classes
 		bookDAO = new BookMapDAO(new BookHelper());
 		loanDAO = new LoanMapDAO(new LoanHelper());
 		memberDAO = new MemberMapDAO(new MemberHelper());
-		
+		//Lets add some test data
 		setupTestData();
 	}
 
@@ -58,6 +59,8 @@ public class Main implements IMainListener {
 	
 	@Override
 	public void borrowBooks() {
+		
+		//Kishantha - changed the vairable scope to final
 		final BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display, 
 				 bookDAO, loanDAO, memberDAO);
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -131,6 +134,7 @@ public class Main implements IMainListener {
 	public static void main(String[] args) {
 		
         // start the GUI
+		//Kishantha - change the varaible scope to final
 		final Main main = new Main();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
