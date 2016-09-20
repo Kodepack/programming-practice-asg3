@@ -85,6 +85,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	
 	public void close() {
 		display.setDisplay(previous, "Main Menu");
+		//Kishantha 
+		//disabling the reader and scanner before going to main screen
+		reader.setEnabled(false);
+		scanner.setEnabled(false);
 	}
 
 	@Override
@@ -253,17 +257,26 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	
 	@Override
 	public void scansCompleted() {
-		throw new RuntimeException("Not implemented yet");
+		//throw new RuntimeException("Not implemented yet");
+		//Prabath
+		//Added the scan complementation implementation
+		setState(EBorrowState.CONFIRMING_LOANS);
 	}
 
 	@Override
 	public void loansConfirmed() {
-		throw new RuntimeException("Not implemented yet");
+		//throw new RuntimeException("Not implemented yet");
+		//Prabath
+		//Added the loan confirmed implementation
+		setState(EBorrowState.COMPLETED);	
 	}
 
 	@Override
 	public void loansRejected() {
-		throw new RuntimeException("Not implemented yet");
+		//		throw new RuntimeException("Not implemented yet");
+		//Prabath
+		//Added loans rejected implmementation
+		setState(EBorrowState.SCANNING_BOOKS);	
 	}
 
 	private String buildLoanListDisplay(List<ILoan> loans) {
