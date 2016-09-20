@@ -85,7 +85,62 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 	@Override
 	public void cardSwiped(int memberID) {
-		throw new RuntimeException("Not implemented yet");
+		//throw new RuntimeException("Not implemented yet");
+		//Kishantha
+		//Added the cardswiped implementation
+		System.out.println("cardSwiped: got " + memberID);
+		if (!state.equals(EBorrowState.INITIALIZED)) {
+			throw new RuntimeException(
+					String.format("BorrowUC_CTL : cardSwiped : illegal operation in state: %s", state));
+		}
+		borrower = memberDAO.getMemberByID(memberID);
+		if (borrower == null) {
+			ui.displayErrorMessage(String.format("Member ID %d not found", memberID));
+			return;
+		}
+		boolean overdue = borrower.hasOverDueLoans();
+		boolean atLoanLimit = borrower.hasReachedLoanLimit();
+		boolean hasFines = borrower.hasFinesPayable();
+		boolean overFineLimit = borrower.hasReachedFineLimit();
+		boolean borrowing_restricted = (overdue || atLoanLimit || overFineLimit);
+		
+		if (borrowing_restricted) {
+			setState(EBorrowState.BORROWING_RESTRICTED);
+		}
+		else {
+			setState(EBorrowState.SCANNING_BOOKS);
+		}
+
+		//display member details
+		int mID = borrower.getID();
+		String mName = borrower.getFirstName() + " " + borrower.getLastName();
+		String mContact = borrower.getContactPhone();
+		ui.displayMemberDetails(mID, mName, mContact);	
+		
+		if (overdue) {
+			ui.displayOverDueMessage();
+		}
+		if (atLoanLimit) {
+			ui.displayAtLoanLimitMessage();
+		}
+		if (hasFines) {
+			float amountOwing = borrower.getFineAmount();
+			ui.displayOutstandingFineMessage(amountOwing);
+		}
+		
+		if (overFineLimit) {
+			float amountOwing = borrower.getFineAmount();
+			ui.displayOverFineLimitMessage(amountOwing);
+		}
+		
+		//display existing loans
+		for (ILoan ln : borrower.getLoans()) {
+			ui.displayExistingLoan(ln.toString());
+		}
+		
+		//initialize scanCount with number of existing loans
+		//so that member doesn't borrow more than they should
+		scanCount = borrower.getLoans().size();
 	}
 	
 	
