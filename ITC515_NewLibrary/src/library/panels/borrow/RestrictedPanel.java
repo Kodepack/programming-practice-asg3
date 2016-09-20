@@ -32,6 +32,8 @@ public class RestrictedPanel extends ABorrowPanel {
 
 	/**
 	 * Create the panel.
+	 * Kishantha
+	 * Marked the variable final to make it compatible with lower versions
 	 */
 	public RestrictedPanel(final IBorrowUIListener listener) {
 		setLayout(null);

@@ -34,6 +34,8 @@ public class ScanningPanel extends ABorrowPanel {
 
 	/**
 	 * Create the panel.
+	 * Kishantha
+	 * Marked the variable final to make it compatible with lower versions 
 	 */
 	public ScanningPanel(final IBorrowUIListener listener) {
 		setLayout(null);

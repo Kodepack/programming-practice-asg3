@@ -19,6 +19,8 @@ public class ConfirmLoanPanel extends ABorrowPanel {
 
 	/**
 	 * Create the panel.
+	 * Kishantha
+	 * Made the listener final to make compatible with lower versions
 	 */
 	public ConfirmLoanPanel(final IBorrowUIListener listener) {
 		setLayout(null);
