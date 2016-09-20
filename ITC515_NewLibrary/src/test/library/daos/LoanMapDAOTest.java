@@ -66,7 +66,21 @@ public class LoanMapDAOTest {
 		
 	}
 
+	@Test
+	public void testGetLoanByID(){
+		int id = 1;
+		ILoanHelper helper = Mockito.mock(ILoanHelper.class);
+		ILoan iLoan = Mockito.mock(ILoan.class);
+		ILoanDAO loanMapDAO = new LoanMapDAO(helper);
+		loanMapDAO.commitLoan(iLoan);
+		ILoan loan = loanMapDAO.getLoanByID(id);
+		//Check if the two loans are equal
+		assertEquals(iLoan,loan);
+		
+	}
 	
+
+
 
 	
 }
