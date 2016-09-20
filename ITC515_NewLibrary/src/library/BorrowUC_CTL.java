@@ -48,10 +48,30 @@ public class BorrowUC_CTL implements ICardReaderListener,
 	public BorrowUC_CTL(ICardReader reader, IScanner scanner, 
 			IPrinter printer, IDisplay display,
 			IBookDAO bookDAO, ILoanDAO loanDAO, IMemberDAO memberDAO ) {
+		//Kishantha
+		//assign the constructor variables 
+		this.bookDAO = bookDAO;
+		this.memberDAO= memberDAO;
+		this.loanDAO = loanDAO;
+		this.reader = reader;
+		this.scanner = scanner;
+		this.printer = printer;
 
+		//initialize the listeners
+		reader.addListener(this);
+		scanner.addListener(this);
+		reader.addListener(this);
 		this.display = display;
 		this.ui = new BorrowUC_UI(this);
-		state = EBorrowState.CREATED;
+		
+		//replaced the variable assignement with
+		//the setter
+		//state = EBorrowState.CREATED;
+		setState(EBorrowState.INITIALIZED);
+		//No need to display here as it will be done at
+		//initialise() which is called from the Main class borrowBooks() method
+		//this.display.setDisplay((JPanel) ui,"Library");
+		
 	}
 	
 	public void initialise() {
@@ -77,7 +97,56 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 	
 	private void setState(EBorrowState state) {
-		throw new RuntimeException("Not implemented yet");
+		//Kishantha
+		//throw new RuntimeException("Not implemented yet");
+		//Added the state change implementation
+		this.state = state;
+		ui.setState(state);
+
+		switch (state) {
+		
+		case INITIALIZED:
+			reader.setEnabled(true);
+			scanner.setEnabled(false);
+			break;
+			
+		case SCANNING_BOOKS:
+			reader.setEnabled(false);
+			scanner.setEnabled(true);
+			this.bookList = new ArrayList<IBook>();
+			this.loanList = new ArrayList<ILoan>();
+			break;
+			
+		case CONFIRMING_LOANS:
+			reader.setEnabled(false);
+			scanner.setEnabled(false);
+			for (ILoan loan : loanList) {
+				ui.displayConfirmingLoan(loan.toString());
+			}
+			break;
+			
+		case COMPLETED:
+			reader.setEnabled(false);
+			scanner.setEnabled(false);
+			for (ILoan loan : loanList) {
+				loanDAO.commitLoan(loan);
+				printer.print(loan.toString()+"\n\n");
+			}
+			break;
+			
+		case CANCELLED:
+			reader.setEnabled(false);
+			scanner.setEnabled(false);
+			break;
+			
+		case BORROWING_RESTRICTED:
+			reader.setEnabled(false);
+			scanner.setEnabled(false);
+			break;
+			
+		default:
+			throw new RuntimeException("Unknown state");
+		}
 	}
 
 	@Override
