@@ -363,6 +363,31 @@ public class BookLowLevelIntegrationTest {
 		assertEquals(EBookState.DISPOSED,book.getState());
 	}
 	
+	/**
+	 * Test for dispose damaged book
+	 */
+	@Test
+	public void testDisposeDamagedBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		IMember member = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		
+		final boolean DAMAGED = true;
+
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		ILoan loan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(loan);
+		assertEquals(EBookState.ON_LOAN,book.getState());
+		book.returnBook(DAMAGED);
+		assertEquals(EBookState.DAMAGED,book.getState());
+		book.dispose();
+		assertEquals(EBookState.DISPOSED,book.getState());
+	}	
 	
 	
 }
