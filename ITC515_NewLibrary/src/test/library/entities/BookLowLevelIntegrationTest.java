@@ -32,7 +32,7 @@ public class BookLowLevelIntegrationTest {
 
 	
 	/**
-	 * Test case for borrow book
+	 * Test  for borrow book
 	 */
 	//@Test
 	public void testBorrowBook(){
@@ -58,7 +58,7 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	/**
-	 * Test case for borrow more than once
+	 * Test  for borrow more than once
 	 */
 	@Test
 	public void testBorrowBookMoreThanOnce(){
@@ -92,7 +92,7 @@ public class BookLowLevelIntegrationTest {
 	
 
 	/**
-	 * Test case for getLoan method of book
+	 * Test  for getLoan method of book
 	 */
 	
 	@Test
@@ -120,7 +120,7 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	/**
-	 * Test case for returning a new book
+	 * Test  for returning a new book
 	 */
 
 	@Test
@@ -142,7 +142,7 @@ public class BookLowLevelIntegrationTest {
 
 
 	/**
-	 * Test case for return borrowed but not damaged book and re borrow
+	 * Test  for return borrowed but not damaged book and re borrow
 	 */
 	
 	@Test
@@ -175,7 +175,7 @@ public class BookLowLevelIntegrationTest {
 	
 
 	/**
-	 * Test case for return book damaged and re borrow
+	 * Test  for return book damaged and re borrow
 	 */
 	@Test
 	public void testReturnBorrowedDamagedBookAndReborrow(){
@@ -211,7 +211,7 @@ public class BookLowLevelIntegrationTest {
 	
 	
 	/**
-	 * Test case for lose new book
+	 * Test  for lose new book
 	 */
 	@Test
 	public void testLoseNewBook(){
@@ -232,7 +232,7 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	/**
-	 * Test case for lose
+	 * Test  for lose
 	 */
 	@Test
 	public void testLose(){
@@ -253,7 +253,7 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	/**
-	 * Test case for repair new book
+	 * Test  for repair new book
 	 */
 	@Test
 	public void testRepairNewBook(){
@@ -273,7 +273,7 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	/**
-	 * Test case for repair damaged book
+	 * Test  for repair damaged book
 	 */
 	@Test
 	public void testRepairDamagedBook(){
@@ -299,5 +299,32 @@ public class BookLowLevelIntegrationTest {
 		
 
 	}
+
+	/**
+	 * Test for dispose borrowed book
+	 */
+	@Test
+	public void testDisposeBorrowedBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		IMember member = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		try {
+			ILoan loan = loanDAO.createLoan(member, book);
+			loanDAO.commitLoan(loan);
+			//lose a new book
+			book.dispose();
+			//this should fail
+			fail("cannot dispose a borrowed");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.ON_LOAN,book.getState());
+	}
+	
+	
 
 }
