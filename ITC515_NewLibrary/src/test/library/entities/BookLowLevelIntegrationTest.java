@@ -325,6 +325,20 @@ public class BookLowLevelIntegrationTest {
 		assertEquals(EBookState.ON_LOAN,book.getState());
 	}
 	
-	
+	/**
+	 * Test for dispose new book
+	 */
+	@Test
+	public void testDisposeNewBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book
+		book.dispose();
+		assertEquals(EBookState.DISPOSED,book.getState());
 
+	}
+	
+	
 }
