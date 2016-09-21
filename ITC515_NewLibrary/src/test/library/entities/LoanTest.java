@@ -42,6 +42,8 @@ public class LoanTest extends TestCase{
 		
 	}
 	
+	//Checks the Valid Values
+	
 	@Test
 	public void testValidValues() {
 
@@ -50,6 +52,18 @@ public class LoanTest extends TestCase{
 		assertEquals(getBook().getID(), book.getID());
 		assertEquals(getBook().getLoan(), book.getLoan());
 		
+	}
+	
+	//Test the Commit function Loaning a book
+	
+	public Loan testCommit(){
+		
+		Loan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		setState(ELoanState.CURRENT);
+		loan.commit(ID);
+		assertEquals(getState(),loan.getState());
+		
+		return loan;
 	}
 	
 	
