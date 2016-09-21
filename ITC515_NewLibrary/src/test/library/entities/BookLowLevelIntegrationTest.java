@@ -31,6 +31,9 @@ import org.junit.Test;
 public class BookLowLevelIntegrationTest {
 
 	
+	/**
+	 * Test case for borrow book
+	 */
 	//@Test
 	public void testBorrowBook(){
 		
@@ -54,6 +57,9 @@ public class BookLowLevelIntegrationTest {
 		
 	}
 	
+	/**
+	 * Test case for borrow more than once
+	 */
 	@Test
 	public void testBorrowBookMoreThanOnce(){
 		
@@ -85,6 +91,9 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 
+	/**
+	 * Test case for getLoan method of book
+	 */
 	
 	@Test
 	public void testGetLoan(){
@@ -110,6 +119,9 @@ public class BookLowLevelIntegrationTest {
 
 	}
 	
+	/**
+	 * Test case for returning a new book
+	 */
 
 	@Test
 	public void testReturnNewBook(){
@@ -129,4 +141,38 @@ public class BookLowLevelIntegrationTest {
 	}
 
 
+	/**
+	 * Test case for return borrowed but not damaged book and re borrow
+	 */
+	
+	@Test
+	public void testReturnBorrowedNotDamagedBookAndReborrow(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		final boolean DAMAGED = true;
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		IMember member1 = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		IMember member2 = memberDAO.addMember("fName0", "lName0", "0001", "email0");		
+		
+		//borrow the book by member1
+		ILoan loan1 = loanDAO.createLoan(member1, book);
+		loanDAO.commitLoan(loan1);
+		
+		//return the book not damaged
+		book.returnBook(!DAMAGED);
+		assertEquals(EBookState.AVAILABLE,book.getState());
+		//borrow the book again by member2
+		ILoan loan2 = loanDAO.createLoan(member2, book);
+		loanDAO.commitLoan(loan2);
+		//successfully borrowed again
+		assertEquals(EBookState.ON_LOAN,book.getState());
+		
+
+	}
+	
+
+	
 }
