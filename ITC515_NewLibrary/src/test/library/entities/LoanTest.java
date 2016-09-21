@@ -97,6 +97,17 @@ public class LoanTest extends TestCase{
 		assertEquals(getState(),loan.getState());
 	}
 	
+	//Check scenario where a return is on time
+	public void testcheckOverDueforNotOverDue(){
+		
+		Loan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		loan.commit(ID);
+		loan.checkOverDue(dateString("12-05-2016"));
+		setState(ELoanState.OVERDUE);
+		assertNotSame(getState(),loan.getState());
+		
+	}
+	
 	
 	private static IBook getBook() {
 
