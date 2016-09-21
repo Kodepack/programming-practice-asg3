@@ -139,5 +139,29 @@ public class MemberMapDAOLowLevelIntegrationTest {
 		
 	}	
 	
+	/**
+	 * Test for find members by names
+	 */
+	@Test
+	public void testFindMembersByNames(){
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		//Add one member fist
+		memberDAO.addMember(MEMBER_01_FIRST_NAME, MEMBER_01_LAST_NAME, MEMBER_01_CONTACTPHONE_NUMBER, MEMBER_01_CONTACT_EMAIL);
+		
+		//Lets try to find member by last name
+		List<IMember> memberList = memberDAO.findMembersByNames(MEMBER_01_FIRST_NAME, MEMBER_01_LAST_NAME);
+		IMember member = memberList.get(0);
+
+		//Lets check the size of the member list
+		assertEquals(1,memberList.size());
+		//lets check the member's properties
+		assertEquals(MEMBER_01_ID, member.getID());
+		assertEquals(MEMBER_01_FIRST_NAME, member.getFirstName());
+		assertEquals(MEMBER_01_LAST_NAME, member.getLastName());
+		assertEquals(MEMBER_01_CONTACTPHONE_NUMBER, member.getContactPhone());
+		assertEquals(MEMBER_01_CONTACT_EMAIL, member.getEmailAddress());
+		
+	}	
+	
 
 }
