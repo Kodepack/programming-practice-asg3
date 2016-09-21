@@ -210,5 +210,26 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 	
+	/**
+	 * Test case for lose new book
+	 */
+	@Test
+	public void testLoseNewBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+
+		try {
+			//lose a new book
+			book.lose();
+			//this should fail
+			fail("cannot loose a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
+	}
+		
 	
 }
