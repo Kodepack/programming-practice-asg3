@@ -111,4 +111,22 @@ public class BookLowLevelIntegrationTest {
 	}
 	
 
+	@Test
+	public void testReturnNewBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		final boolean DAMAGED = true;
+		try {
+			//Should not be possible to return a new book
+			book.returnBook(!DAMAGED);
+			fail("cannot return a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
+	}
+
+
 }
