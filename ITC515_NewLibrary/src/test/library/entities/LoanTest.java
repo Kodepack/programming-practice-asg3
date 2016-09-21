@@ -66,6 +66,16 @@ public class LoanTest extends TestCase{
 		return loan;
 	}
 	
+	//Testing the Complete Function for a Loan
+	public void testComplete(){
+		
+		
+		Loan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		setState(ELoanState.CURRENT);
+		loan.commit(ID);
+		assertEquals(getState(),loan.getState());
+		
+	} 
 	
 	private static IBook getBook() {
 
