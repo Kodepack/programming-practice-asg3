@@ -96,10 +96,10 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		//throw new RuntimeException("Not implemented yet");
 		//Kishantha
 		//Added the cardswiped implementation
-		System.out.println("cardSwiped: got " + memberID);
+		System.out.println("Calling cardSwiped for memberID: " + memberID);
 		if (!state.equals(EBorrowState.INITIALIZED)) {
 			throw new RuntimeException(
-					String.format("BorrowUC_CTL : cardSwiped : illegal operation in state: %s", state));
+					String.format("Invalid operation for state: %s", state));
 		}
 		borrower = memberDAO.getMemberByID(memberID);
 		if (borrower == null) {
