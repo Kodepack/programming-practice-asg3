@@ -108,6 +108,26 @@ public class LoanTest extends TestCase{
 		
 	}
 	
+	//Same Details returned after Loan commit in Book
+	public void testValidValuesCommitBook(){
+		
+		Loan loan=testCommit();
+		IBook book = (IBook) loan.getBook();
+		assertEquals(getBook().getID(), book.getID());
+		
+		
+	}
+	//Same Details returned after Loan commit in Member
+	public void testValidValuesCommitMember(){
+		
+		Loan loan=testCommit();
+		IMember memeber= (IMember) loan.getBorrower();
+		assertEquals(getMember().getID(), memeber.getID());
+		
+		
+	}
+	
+	
 	
 	private static IBook getBook() {
 
