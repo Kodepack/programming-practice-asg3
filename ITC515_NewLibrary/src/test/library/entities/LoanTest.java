@@ -42,6 +42,16 @@ public class LoanTest extends TestCase{
 		
 	}
 	
+	@Test
+	public void testValidValues() {
+
+		ILoan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		IBook book = (IBook) loan.getBook();
+		assertEquals(getBook().getID(), book.getID());
+		assertEquals(getBook().getLoan(), book.getLoan());
+		
+	}
+	
 	
 	private static IBook getBook() {
 
