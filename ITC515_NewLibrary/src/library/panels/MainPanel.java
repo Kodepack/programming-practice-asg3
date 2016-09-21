@@ -15,7 +15,8 @@ import java.awt.event.ActionEvent;
 public class MainPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
+	//Kishantha
+	//Made the variable final for compatibility with lower versions
 	public MainPanel(final IMainListener listener) {
 		setBorder(new TitledBorder(null, "Main Menu", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setBounds(500, 50, 470, 680);

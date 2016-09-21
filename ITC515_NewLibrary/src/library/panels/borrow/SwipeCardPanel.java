@@ -21,6 +21,8 @@ public class SwipeCardPanel extends ABorrowPanel {
 
 	/**
 	 * Create the panel.
+	 * Kishantha
+	 * marked the variable final to make it compatible with lower versions
 	 */
 	public SwipeCardPanel(final IBorrowUIListener listener) {
 		setLayout(null);
