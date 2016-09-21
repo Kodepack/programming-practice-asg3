@@ -77,6 +77,27 @@ public class LoanTest extends TestCase{
 		
 	} 
 	
+	//Testing Overdue Return
+	@Test
+	public void testIsOverDue(){
+		
+		Loan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		assertFalse(loan.isOverDue());
+	
+	}
+	
+	@Test
+	//Checking whether there's an overdue inserting a date
+	public void testcheckOverDue(){
+		
+		Loan loan = new Loan(getBook(),getMember(),BORROWDATE, DUEDATE);
+		loan.commit(ID);
+		loan.checkOverDue(dateString("12-05-2017"));
+		setState(ELoanState.OVERDUE);
+		assertEquals(getState(),loan.getState());
+	}
+	
+	
 	private static IBook getBook() {
 
 		return Mockito.mock(IBook.class);
