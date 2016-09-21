@@ -230,6 +230,27 @@ public class BookLowLevelIntegrationTest {
 		}
 		assertEquals(EBookState.AVAILABLE,book.getState());
 	}
-		
 	
+	/**
+	 * Test case for lose
+	 */
+	@Test
+	public void testLose(){
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		IMember member = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		//borrow the book
+		ILoan loan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(loan);
+		//lose the book
+		book.lose();
+		//this should be successful
+		assertEquals(EBookState.LOST,book.getState());
+
+	}
+	
+
 }
