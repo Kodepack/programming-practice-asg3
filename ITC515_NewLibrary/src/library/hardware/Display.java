@@ -36,6 +36,11 @@ public class Display extends JFrame implements IDisplay {
 			System.out.println("Display.setDisplay: removing current");
 			cardLayout.removeLayoutComponent(current);
 		}
+		//Kishantha
+		//Frame needs to be invalidated and validated for the
+		//new panel to be visible.
+        this.invalidate();
+        this.validate();
 		current = panel;
 	}
 
