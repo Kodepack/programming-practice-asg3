@@ -252,5 +252,25 @@ public class BookLowLevelIntegrationTest {
 
 	}
 	
-
+	/**
+	 * Test case for repair new book
+	 */
+	@Test
+	public void testRepairNewBook(){
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		try {
+			//lose a new book
+			book.repair();
+			//this should fail
+			fail("cannot repair a new book");
+		} catch (RuntimeException e) {
+			//ignore
+		}
+		assertEquals(EBookState.AVAILABLE,book.getState());
+	}
+	
+	
 }
