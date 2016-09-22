@@ -1,6 +1,8 @@
 package test.library.entities;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -30,8 +32,8 @@ public class LoanLevelIntergrationTest {
 		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
 		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
 		
-		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
-		IMember member = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		IBook book  = bookDAO.addBook("authorX", "titleX", "callNoX");
+		IMember member = memberDAO.addMember("fName0", "lName0", "000X", "email0");
 		ILoan loan = loanDAO.createLoan(member, book);
 		loanDAO.commitLoan(loan);
 		
@@ -40,6 +42,26 @@ public class LoanLevelIntergrationTest {
 		
 		
 	}
+	
+	@Test
+	
+	public void checkOverDueForCurrentDate(){
+	
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("authorX", "titleX", "callNoX");
+		IMember member = memberDAO.addMember("fName0", "lName0", "000X", "email0");
+		ILoan loan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(loan);
+		assertFalse(loan.checkOverDue(new Date()));
+	
+		
+		
+	}
+	
+	
 	
 
 	
