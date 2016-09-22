@@ -101,7 +101,22 @@ public class LoanLevelIntergrationTest {
 	}
 	
 	
+	public void checkNotOverDue(){
+		
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("authorX", "titleX", "callNoX");
+		IMember member = memberDAO.addMember("fName0", "lName0", "000X", "email0");
+		ILoan loan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(loan);
 
+		setOverDueDate(-1, loanDAO);
+		assertFalse(loan.checkOverDue(new Date()));
+		
+	}
 	
 	
 	
