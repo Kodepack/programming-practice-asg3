@@ -2,6 +2,7 @@ package test.library.entities;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
@@ -45,6 +46,7 @@ public class LoanLevelIntergrationTest {
 	
 	@Test
 	
+	//Testing whether Loan will overdue to book loaned at the same instance
 	public void checkOverDueForCurrentDate(){
 	
 		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
@@ -60,6 +62,46 @@ public class LoanLevelIntergrationTest {
 		
 		
 	}
+	
+	@Test
+	//TestMemeber with OverdueLoan
+	
+	public void checkOverDue(){
+		
+		
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("authorX", "titleX", "callNoX");
+		IMember member = memberDAO.addMember("fName0", "lName0", "000X", "email0");
+		ILoan loan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(loan);
+		setOverDueDate(1, loanDAO);
+		assertTrue(loan.checkOverDue(new Date()));
+		
+	}
+	
+	// Make a Member with an overdue loan
+	
+	public void setOverDueDate(int timeNum, ILoanDAO loanDAO){
+		
+		
+		Calendar cal = Calendar.getInstance();
+		Date now = cal.getTime();
+		
+		cal.setTime(now);
+		cal.add(Calendar.DATE, ILoan.LOAN_PERIOD + timeNum);
+		Date checkDate = cal.getTime();		
+		loanDAO.updateOverDueStatus(checkDate);
+		
+		
+		
+		
+	}
+	
+	
+
 	
 	
 	
