@@ -192,7 +192,44 @@ public class SystemTest {
 
     }
     
-   private void setUpTestData() {
+    /**
+     * Test card swipe and scan book for borrower reached loan limits
+     */
+    @Test
+    public void testCardSwipedAndBookScanForReachedLoanLimit() {
+        //arrange
+        sut_.initialise();
+        reset(reader_);
+        reset(scanner_);
+        reset(ui_);
+        
+      //Check member 4 who has maxed out loan limits
+        int memberId = 4;
+        
+        //execute
+        sut_.cardSwiped(memberId);
+
+        //asserts and verifies
+        assertEquals(EBorrowState.BORROWING_RESTRICTED,sut_.getState());
+        verify(reader_).setEnabled(false);
+        verify(scanner_).setEnabled(false);
+        verify(ui_).setState(EBorrowState.BORROWING_RESTRICTED);
+        verify(ui_, atLeastOnce()).displayScannedBookDetails(any(String.class));           
+        verify(ui_).displayPendingLoan(""); 
+        verify(ui_).displayMemberDetails(eq(memberId), anyString(), anyString());  
+        verify(ui_).displayExistingLoan(anyString());
+
+        try{
+        	sut_.bookScanned(12);
+        	fail("Cannot scan books for restricted borrower");
+        }catch(RuntimeException e){
+        	//Ignore the invalid operation error
+        }
+
+    }
+    
+
+    private void setUpTestData() {
         IBook[] book = new IBook[15];
         IMember[] member = new IMember[6];
         
