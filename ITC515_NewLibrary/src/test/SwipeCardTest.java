@@ -1,5 +1,7 @@
 package test;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -101,13 +103,60 @@ public class SwipeCardTest {
 			cardSwiped(i);
 		}
 	}
+
 	
-	public void cardSwiped(int memberID) {
+	@Test
+	public void testSwipeCardMemberWithOverdueLoan(){
+		//Checking member id 2 - with overdue
+		IMember borrower = cardSwiped(2);
+		
+		assertTrue("This member should have overdue loans",borrower.hasOverDueLoans());
+		assertTrue("Member should not have reached loan limits",!borrower.hasReachedLoanLimit());
+		assertTrue("Member should not have fines payable",!borrower.hasFinesPayable());
+		assertTrue("Member should not have fines limit",!borrower.hasReachedFineLimit());
+	}
+
+	
+	@Test
+	public void testSwipeCardMemberReachedLoanLimit(){
+		//Check member 4 who has maxed out loan limits
+		IMember borrower = cardSwiped(4);
+		
+		assertTrue("This member should have overdue loans",!borrower.hasOverDueLoans());
+		assertTrue("Member should not have reached loan limits",borrower.hasReachedLoanLimit());
+		assertTrue("Member should not have fines payable",!borrower.hasFinesPayable());
+		assertTrue("Member should not have fines limit",!borrower.hasReachedFineLimit());
+	}
+
+	@Test
+	public void testSwipeCardMemberFinesPayableAndReachedLimit(){
+		//Check member 3 who has maxed out fines
+		IMember borrower = cardSwiped(3);
+		
+		assertTrue("This member should have overdue loans",!borrower.hasOverDueLoans());
+		assertTrue("Member should not have reached loan limits",!borrower.hasReachedLoanLimit());
+		assertTrue("Member should have fines payable",borrower.hasFinesPayable());
+		assertTrue("Member should not have fines limit",borrower.hasReachedFineLimit());
+	}
+	
+
+	@Test
+	public void testSwipeCardMemberFinesPayable(){
+		//Check member 5 who has fines payable but not over limit
+		IMember borrower = cardSwiped(5);
+		
+		assertTrue("This member should not have overdue loans",!borrower.hasOverDueLoans());
+		assertTrue("Member should not have reached loan limits",!borrower.hasReachedLoanLimit());
+		assertTrue("Member should have fines payable",borrower.hasFinesPayable());
+		assertTrue("Member should not have fines limit",!borrower.hasReachedFineLimit());
+	}
+	
+	public IMember cardSwiped(int memberID) {
 
 		IMember borrower = memberDAO.getMemberByID(memberID);
 		if (borrower == null) {
 			System.out.println(String.format("Member ID %d not found", memberID));
-			return;
+			return null;
 		}
 		boolean overdue = borrower.hasOverDueLoans();
 		boolean atLoanLimit = borrower.hasReachedLoanLimit();
@@ -137,13 +186,13 @@ public class SwipeCardTest {
 		}
 		if (hasFines) {
 			float amountOwing = borrower.getFineAmount();
-			System.out.println(String.format("Amount owing %d", amountOwing));
+			System.out.println(String.format("Amount owing %f", amountOwing));
 
 		}
 		
 		if (overFineLimit) {
 			float amountOwing = borrower.getFineAmount();
-			System.out.println(String.format("Amount owing %d", amountOwing));
+			System.out.println(String.format("Amount owing %f", amountOwing));
 		}
 		
 		//display existing loans
@@ -152,7 +201,12 @@ public class SwipeCardTest {
 
 		}
 		
+		
+		return borrower;
+
 	}
+	
+	
 
 
 }
