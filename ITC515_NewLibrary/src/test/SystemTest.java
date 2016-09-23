@@ -84,7 +84,7 @@ public class SystemTest {
 
     /**
      * Test card swipe and book scan for borrower with no restrictions
-     */
+     */ 
     @Test
     public void testCardSwipedAndBookScanForNoRestrictions() {
         //arrange
