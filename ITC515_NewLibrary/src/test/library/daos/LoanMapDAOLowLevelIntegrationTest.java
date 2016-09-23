@@ -74,7 +74,7 @@ public class LoanMapDAOLowLevelIntegrationTest {
 	 * Test get loan by book
 	 */
 	@Test
-	public void testGetLoanByBook(){
+	public void testGetLoanByBook(){ 
 		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
 		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
 		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
