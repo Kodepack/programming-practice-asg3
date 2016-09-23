@@ -62,7 +62,7 @@ public class Main implements IMainListener {
 		
 		//Kishantha - changed the vairable scope to final
 		final BorrowUC_CTL ctl = new BorrowUC_CTL(reader, scanner, printer, display, 
-				 bookDAO, loanDAO, memberDAO);
+				 bookDAO, loanDAO, memberDAO, new BorrowUC_UI());
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	ctl.initialise();

@@ -51,7 +51,7 @@ public class BorrowUC_CTL implements ICardReaderListener,
 
 	public BorrowUC_CTL(ICardReader reader, IScanner scanner, 
 			IPrinter printer, IDisplay display,
-			IBookDAO bookDAO, ILoanDAO loanDAO, IMemberDAO memberDAO ) {
+			IBookDAO bookDAO, ILoanDAO loanDAO, IMemberDAO memberDAO, BorrowUC_UI ui ) {
 		//Kishantha
 		//assign the constructor variables 
 		this.bookDAO = bookDAO;
@@ -66,21 +66,23 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		scanner.addListener(this);
 		reader.addListener(this);
 		this.display = display;
-		this.ui = new BorrowUC_UI(this);
-		
+		this.ui = ui;
+		((BorrowUC_UI)this.ui).setListener(this);
 		//replaced the variable assignement with
 		//the setter
 		//state = EBorrowState.CREATED;
-		setState(EBorrowState.INITIALIZED);
+		
 		//No need to display here as it will be done at
 		//initialise() which is called from the Main class borrowBooks() method
 		//this.display.setDisplay((JPanel) ui,"Library");
 		
 	}
 	
+	
 	public void initialise() {
 		previous = display.getDisplay();
-		display.setDisplay((JPanel) ui, "Borrow UI");		
+		display.setDisplay((JPanel) ui, "Borrow UI");
+		setState(EBorrowState.INITIALIZED);
 	}
 	
 	public void close() {
@@ -124,7 +126,8 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		String mName = borrower.getFirstName() + " " + borrower.getLastName();
 		String mContact = borrower.getContactPhone();
 		ui.displayMemberDetails(mID, mName, mContact);	
-		
+		ui.displayScannedBookDetails("");
+		ui.displayPendingLoan("");
 		if (overdue) {
 			ui.displayOverDueMessage();
 		}
@@ -142,10 +145,11 @@ public class BorrowUC_CTL implements ICardReaderListener,
 		}
 		
 		//display existing loans
+		StringBuilder str = new StringBuilder();
 		for (ILoan ln : borrower.getLoans()) {
-			ui.displayExistingLoan(ln.toString());
+			str.append(ln.toString());
 		}
-		
+		ui.displayExistingLoan(str.toString());
 		//initialize scanCount with number of existing loans
 		//so that member doesn't borrow more than they should
 		scanCount = borrower.getLoans().size();
@@ -286,6 +290,14 @@ public class BorrowUC_CTL implements ICardReaderListener,
 			bld.append(ln.toString());
 		}
 		return bld.toString();		
+	}
+
+	public EBorrowState getState() {
+		return this.state;
+	}
+
+	public int getScanCount() {
+		return scanCount;
 	}
 
 }

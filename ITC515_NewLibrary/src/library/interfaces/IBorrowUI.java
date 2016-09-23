@@ -1,5 +1,7 @@
 package library.interfaces;
 
+import library.BorrowUC_CTL;
+
 public interface IBorrowUI {
 
 	public void setState(EBorrowState state);
@@ -23,5 +25,6 @@ public interface IBorrowUI {
 	public void displayConfirmingLoan(String loanDetails);
 	
 	public void displayErrorMessage(String errorMesg);
+
 	
 }

@@ -28,12 +28,6 @@ import library.interfaces.entities.IMember;
 
 public class MemberTest {
 
-	
-	
-	private CardReader reader;
-	private Scanner scanner;
-	private Printer printer;
-	private Display display;
 	private IBookDAO bookDAO;
 	private ILoanDAO loanDAO;
 	private IMemberDAO memberDAO;
@@ -42,12 +36,6 @@ public class MemberTest {
 	@Before
 	public void init() {
 
-		
-		reader = new CardReader();
-		scanner = new Scanner();
-		printer = new Printer();
-		display = new Display();
-		
 		//Kishantha
 		//Initialize the concrete classes
 		bookDAO = new BookMapDAO(new BookHelper());
@@ -113,6 +101,7 @@ public class MemberTest {
 		}
 	}
 	
+/*
 	
 	@Test
 	public void testSwipeCard(){
@@ -120,7 +109,10 @@ public class MemberTest {
 				 bookDAO, loanDAO, memberDAO);
 		
 		ctl.cardSwiped(454);
-	}
+	} */
+	
+	
+
 	
 	
 	@Test

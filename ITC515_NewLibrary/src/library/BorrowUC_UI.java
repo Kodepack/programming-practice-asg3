@@ -24,17 +24,22 @@ public class BorrowUC_UI extends JPanel implements IBorrowUI {
 	private Map<EBorrowState,IBorrowUI> panels;
 
 	
-	public BorrowUC_UI(IBorrowUIListener listener) {
-		this.listener = listener;
+	public BorrowUC_UI() {
+		//this.listener = listener;
 		this.panels = new HashMap<EBorrowState,IBorrowUI>();		
 		this.setLayout(new CardLayout());
 
+
+		//addPanel(new CancelledPanel(),           EBorrowState.CANCELLED);
+		//addPanel(new CompletedPanel(),           EBorrowState.COMPLETED);
+	}
+	
+	public void setListener(BorrowUC_CTL listener){
+		this.listener = listener;
 		addPanel(new SwipeCardPanel(listener),   EBorrowState.INITIALIZED);
 		addPanel(new ScanningPanel(listener),    EBorrowState.SCANNING_BOOKS);
 		addPanel(new RestrictedPanel(listener),  EBorrowState.BORROWING_RESTRICTED);
 		addPanel(new ConfirmLoanPanel(listener), EBorrowState.CONFIRMING_LOANS);
-		//addPanel(new CancelledPanel(),           EBorrowState.CANCELLED);
-		//addPanel(new CompletedPanel(),           EBorrowState.COMPLETED);
 	}
 	
 	private void addPanel(ABorrowPanel panel, EBorrowState state) {
