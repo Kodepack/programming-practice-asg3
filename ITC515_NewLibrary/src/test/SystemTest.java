@@ -82,6 +82,41 @@ public class SystemTest {
         verify(ui_).setState(any(EBorrowState.class));
     }
 
+    /**
+     * Test card swipe and book scan for borrower with no restrictions
+     */
+    @Test
+    public void testCardSwipedAndBookScanForNoRestrictions() {
+        //arrange
+        sut_.initialise();
+        reset(reader_);
+        reset(scanner_);
+        reset(ui_);
+        
+        //select a member with no restrictions, no existing loans
+        int memberId = 1;
+        
+        //execute
+        sut_.cardSwiped(memberId);
+
+        //asserts and verifies
+        assertEquals(EBorrowState.SCANNING_BOOKS,sut_.getState());
+        verify(reader_).setEnabled(false);
+        verify(scanner_).setEnabled(true);
+        verify(ui_).setState(EBorrowState.SCANNING_BOOKS);
+        verify(ui_, atLeastOnce()).displayScannedBookDetails(any(String.class));           
+        verify(ui_).displayPendingLoan(""); 
+        verify(ui_).displayMemberDetails(eq(memberId), anyString(), anyString());  
+        verify(ui_).displayExistingLoan(anyString());
+        assertTrue(sut_.getScanCount() == 0);
+ 
+        sut_.bookScanned(12);
+        
+        verify(ui_, atLeastOnce()).displayScannedBookDetails(anyString());
+        verify(ui_, atLeastOnce()).displayPendingLoan(anyString());
+        assertTrue(sut_.getScanCount() == 1);
+    }
+    
 
     
     private void setUpTestData() {
