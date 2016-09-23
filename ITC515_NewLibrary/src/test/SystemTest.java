@@ -84,7 +84,7 @@ public class SystemTest {
 
     /**
      * Test card swipe and book scan for borrower with no restrictions
-     */ 
+     */
     @Test
     public void testCardSwipedAndBookScanForNoRestrictions() {
         //arrange
@@ -117,8 +117,45 @@ public class SystemTest {
         assertTrue(sut_.getScanCount() == 1);
     }
     
+    
+    /**
+     * Test swipe card and book scan for borrower with fines payable but not over limit
+     */
+    
+    @Test
+    public void testCardSwipedAndBookScanForFinesPayableNotOverLimit() {
+        //arrange
+        sut_.initialise();
+        reset(reader_);
+        reset(scanner_);
+        reset(ui_);
+        
+		//Check member 5 who has fines payable but not over limit
+        int memberId = 5;
+        
+        //execute
+        sut_.cardSwiped(memberId);
+
+        //asserts and verifies
+        assertEquals(EBorrowState.SCANNING_BOOKS,sut_.getState());
+        verify(reader_).setEnabled(false);
+        verify(scanner_).setEnabled(true);
+        verify(ui_).setState(EBorrowState.SCANNING_BOOKS);
+        verify(ui_, atLeastOnce()).displayScannedBookDetails(any(String.class));           
+        verify(ui_).displayPendingLoan(""); 
+        verify(ui_).displayMemberDetails(eq(memberId), anyString(), anyString());  
+        verify(ui_).displayExistingLoan(anyString());
+        assertTrue(sut_.getScanCount() == 0);
+ 
+        sut_.bookScanned(12);
+        
+        verify(ui_, atLeastOnce()).displayScannedBookDetails(anyString());
+        verify(ui_, atLeastOnce()).displayPendingLoan(anyString());
+        assertTrue(sut_.getScanCount() == 1);
+    }
 
     
+   
     private void setUpTestData() {
         IBook[] book = new IBook[15];
         IMember[] member = new IMember[6];
