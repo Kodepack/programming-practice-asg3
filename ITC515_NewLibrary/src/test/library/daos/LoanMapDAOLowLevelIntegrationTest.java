@@ -70,6 +70,29 @@ public class LoanMapDAOLowLevelIntegrationTest {
 	}
 	
 
+	/**
+	 * Test get loan by book
+	 */
+	@Test
+	public void testGetLoanByBook(){
+		IBookDAO bookDAO = new BookMapDAO(new BookHelper());
+		ILoanDAO loanDAO = new LoanMapDAO(new LoanHelper());
+		IMemberDAO memberDAO = new MemberMapDAO(new MemberHelper());
+		
+		IBook book  = bookDAO.addBook("author1", "title1", "callNo1");
+		IMember member = memberDAO.addMember("fName0", "lName0", "0001", "email0");
+		
+		ILoan iLoan = loanDAO.createLoan(member, book);
+		loanDAO.commitLoan(iLoan);
+		
+		ILoan loan = loanDAO.getLoanByBook(book);
+		//Check if the two loans are equal
+		assertEquals(iLoan,loan);
+		
+	}
+	
+	
+
 
 	
 }
